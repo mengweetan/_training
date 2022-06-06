@@ -15,7 +15,7 @@ def AnotherView(request):
     # Return the response
     return response
 
-def renderView(request):
+def RenderView(request):
     student= {'firstname': 'david', 'lastname': 'chua'}
 
     context= {
