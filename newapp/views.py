@@ -24,3 +24,13 @@ def RenderView(request):
 
         }
     return render(request, 'rendered.html', context)
+
+# lesson 4
+# https://docs.djangoproject.com/en/4.0/topics/class-based-views/intro/
+from django.views import View
+
+class MyClassView(View):
+    def get(self, request):
+        # <view logic>
+        print ("whatever you like")
+        return HttpResponse('result')
