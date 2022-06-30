@@ -15,23 +15,76 @@ from rest_framework.response import Response
 class StudentViewSet(APIView):
     """
     API endpoint that allows users to be viewed or edited.
+    Headers should be set as
+    Content-Type: application/json
     """
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
     def get(self, request, format=None):
         students = Student.objects.all()
         context = {}
         context['data'] = StudentSerializer(students, many=True).data
         return Response(context)
-    """
+
     def post(self, request, format=None):
-        context = {}
+        context = {'action': 'post'}
+        """
+        {"name":"mengwee"}
+        """
+        data = request.data
+
+        print(data)
+        try:
+            name = data["name"]
+            new_student = Student()
+            new_student.name = name
+            new_student.save()
+            context['remark'] = f"New student name is {name}"
+        except:
+            context['remark'] = "error"
+        return Response(context)
+
+    def put(self, request, format=None):
+        context = {'action': 'put'}
+        """
+        {"name":"mengwee",
+        "new_name":"tanmengwee"}
+        """
         data = request.data
         print(data)
+        try:
+            name = data["name"]
+            students = Student.objects.filter(name=name)
+            existing_student = students[0]
+            existing_student.name = data["new_name"]
+            existing_student.save()
+            context['remark'] = f"Student new name is {existing_student.name}"
+        except:
+            context['remark'] = "error"
         return Response(context)
-    """
+
+    def delete(self, request, format=None):
+        context = {'action': 'delete'}
+        """
+        {"name":"mengwee"}
+        """
+        data = request.data
+        print(data)
+        try:
+            name = data["name"]
+            students = Student.objects.filter(name=name)
+            existing_student = students[0]
+
+            # another method
+            existing_student = Student.objects.get(name=name)
+
+            existing_student.delete()
+            context['remark'] = f"Deleted student whese name is {name}"
+        except:
+            context['remark'] = "error"
+        return Response(context)
 
 
 def TestView(request):
