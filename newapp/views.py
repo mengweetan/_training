@@ -10,6 +10,25 @@ from .serializers import StudentSerializer
 from .models import Student
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.authtoken.models import Token
+from django.contrib.auth.models import User
+
+
+class Login(APIView):
+
+    permission_classes = (permissions.AllowAny,)
+
+    def post(self, request, format=None):
+        context = {}
+        data = request.data
+        print(data)
+        if data.get("id") == "xxx" and data.get("pw") == "yyy":
+            print('ok')
+            user = User.objects.get(username='mw')
+            token, _ = Token.objects.get_or_create(user=user)
+            context["token"] = token.key
+
+        return Response(context)
 
 
 class StudentViewSet(APIView):

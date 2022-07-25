@@ -1,6 +1,6 @@
 from django.views.generic import TemplateView
 from django.urls import path, include
-from .views import TestView, AnotherView, RenderView, MyClassView, MyFormView, StudentViewSet
+from .views import Login, TestView, AnotherView, RenderView, MyClassView, MyFormView, StudentViewSet
 #from rest_framework import routers
 
 #router = routers.DefaultRouter()
@@ -15,6 +15,7 @@ urlpatterns = [
     # we are trying class based view today; lessn 4
     path('lesson4-1/', MyClassView.as_view(), name='class_view'),
     path('lesson4-2/', MyFormView.as_view(), name='class_view'),
-    path('students/', StudentViewSet.as_view(), name='api_student_view')
+    path('students/', StudentViewSet.as_view(), name='api_student_view'),
+    path('login/', Login.as_view(), name='login')
 
 ]
