@@ -6,6 +6,7 @@ from django.http import HttpResponse, JsonResponse
 
 from rest_framework import viewsets
 from rest_framework import permissions
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from .serializers import StudentSerializer
 from .models import Student
 from rest_framework.views import APIView
@@ -17,17 +18,36 @@ from django.contrib.auth.models import User
 class Login(APIView):
 
     permission_classes = (permissions.AllowAny,)
+    #permission_classes = (permissions.IsAuthenticated,)
 
     def post(self, request, format=None):
         context = {}
         data = request.data
         print(data)
-        if data.get("id") == "xxx" and data.get("pw") == "yyy":
+        if data.get("id") == "mw" and data.get("pw") == "password":
             print('ok')
             user = User.objects.get(username='mw')
             token, _ = Token.objects.get_or_create(user=user)
             context["token"] = token.key
 
+        return Response(context)
+
+
+class ChangeData(APIView):
+    #permission_classes = (permissions.AllowAny,)
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def post(self, request, format=None):
+        #print("changeData-post")
+        data = request.data
+
+        name = data.get("name")
+        student = Student.objects.get(name=name)
+        print(student)
+        student.name = "NotMary"
+        student.save()
+        data = {"result": "name changed"}
+        context = {"message": data}
         return Response(context)
 
 

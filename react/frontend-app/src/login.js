@@ -25,6 +25,8 @@ export default class Login extends Component {
   submitform = () => {
     console.log(this.state);
     const data = this.state;
+
+
     axios.post("http://localhost:8000/app/login/", data).then(response => {
 
 
@@ -46,7 +48,37 @@ export default class Login extends Component {
 
 
 
-  };
+
+
+
+  }
+
+
+    changeUserName = (e) => {
+
+      var url =  "http://localhost:8000/app/change/";
+      var change_data = {"name": "mary"};
+      var  headers =  {
+          "Authorization": "Token " + this.state.token,
+          "Content-Type": "application/json"
+        }
+      console.log(headers)
+      fetch(url, {
+        method: "POST",
+        withCredentials: true,
+        headers: headers,
+        body: JSON.stringify(change_data)
+      })
+        .then(response => {
+          return response.json();
+        })
+        .then(res => {
+          console.log(res.message);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
 
   showtoken = () => {
     alert (this.state.token)
@@ -55,6 +87,7 @@ export default class Login extends Component {
   render() {
     return (
       <div>
+
         <input placeholder="id" onChange={e => this.handleChange_id(e)} />
         <br />
         <input placeholder="password" onChange={e => this.handleChange_pw(e)} />
@@ -63,6 +96,11 @@ export default class Login extends Component {
         <br />
         <br />
         <input type="submit" onClick={e => this.showtoken()} value="token?" />
+
+  <br />
+        <input type="submit" onClick={e => this.changeUserName(e)}  />
+
+
       </div>
     );
   }
