@@ -13,6 +13,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
+import pandas as pd
+
+import json
 
 
 class Login(APIView):
@@ -30,6 +33,24 @@ class Login(APIView):
             token, _ = Token.objects.get_or_create(user=user)
             context["token"] = token.key
 
+        return Response(context)
+
+
+class GetData(APIView):
+    permission_classes = (permissions.AllowAny,)
+    #permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request, format=None):
+
+        df = pd.read_csv('newapp/_data.csv')
+        df['by-month'] = df.apply(lambda row: row['month'][5:], axis=1)
+        gen_df = df.groupby(["by-month"]).mean()
+
+        result = gen_df.to_json()
+        #print(result)
+
+        context = {}
+        context['data'] = json.loads(result)
         return Response(context)
 
 

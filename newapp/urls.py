@@ -1,6 +1,6 @@
 from django.views.generic import TemplateView
 from django.urls import path, include
-from .views import (Login, TestView, AnotherView,
+from .views import (Login, TestView, AnotherView, GetData,
                     RenderView, MyClassView, MyFormView, StudentViewSet, ChangeData)
 #from rest_framework import routers
 
@@ -18,6 +18,7 @@ urlpatterns = [
     path('lesson4-2/', MyFormView.as_view(), name='class_view'),
     path('students/', StudentViewSet.as_view(), name='api_student_view'),
     path('login/', Login.as_view(), name='login'),
-    path('change/', ChangeData.as_view(), name='ChangeData')
+    path('change/', ChangeData.as_view(), name='ChangeData'),
+    path('get_data/', GetData.as_view(), name='get_data')
 
 ]
